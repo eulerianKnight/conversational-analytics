@@ -1,0 +1,36 @@
+# Backend Dependencies
+fastapi
+uvicorn[standard]
+pydantic[email]
+pydantic-settings
+python-jose[cryptography]
+passlib[bcrypt]
+PyJWT
+python-multipart
+
+# Database
+snowflake-connector-python
+
+# AI and Analytics
+anthropic
+pandas
+numpy
+scikit-learn
+statsmodels
+
+# HTTP Client
+requests
+httpx
+
+# Utilities
+python-dotenv
+
+# Development
+pytest
+pytest-asyncio
+black
+flake8
+
+# For deployment
+gunicorn
+docker

@@ -9,7 +9,11 @@ import json
 from datetime import datetime
 
 from app.core.config import settings
-from app.core.database import db_manager, memory_manager
+from app.core.database import DatabaseManager, MemoryManager
+
+# Initialize managers
+db_manager = DatabaseManager()
+memory_manager = MemoryManager()
 from app.services.snowflake_service import SnowflakeService
 from app.services.claude_service import ClaudeService
 from app.api.endpoints.auth import get_user_by_username
@@ -154,7 +158,7 @@ async def execute_natural_language_query(
             follow_up_suggestions=follow_up_suggestions,
             execution_time=total_execution_time,
             from_cache=query_result.get("from_cache", False),
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
         )
 
         return response
@@ -195,7 +199,7 @@ async def get_supplier_performance(
             "metadata": result["metadata"],
             "insights": insights,
             "period_days": days,
-            "timestamp": datetime.utcnow(),
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
@@ -226,7 +230,7 @@ async def get_sales_forecast_data(
             "metadata": result["metadata"],
             "insights": insights,
             "period_months": months,
-            "timestamp": datetime.utcnow(),
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
@@ -250,7 +254,7 @@ async def get_database_schema(
         return {
             "schema_context": schema_info,
             "tables": table_info["data"],
-            "timestamp": datetime.utcnow(),
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
@@ -275,7 +279,7 @@ async def get_table_details(
             "table_name": table_name,
             "columns": table_info["data"],
             "sample_data": sample_data["data"],
-            "timestamp": datetime.utcnow(),
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
@@ -297,11 +301,7 @@ async def get_query_history(
     try:
         history = memory_manager.get_conversation_history(user["id"], session_id, limit)
 
-        return {
-            "history": history,
-            "count": len(history),
-            "timestamp": datetime.utcnow(),
-        }
+        return {"history": history, "count": len(history), "timestamp": datetime.now()}
 
     except Exception as e:
         raise HTTPException(
@@ -331,7 +331,7 @@ async def validate_sql_query(
             "is_valid": is_valid,
             "message": message,
             "performance_analysis": performance_analysis,
-            "timestamp": datetime.utcnow(),
+            "timestamp": datetime.now(),
         }
 
     except Exception as e:
@@ -373,7 +373,7 @@ async def get_dashboard_data(
             except Exception as e:
                 dashboard_data[metric_name] = {"error": str(e)}
 
-        return {"metrics": dashboard_data, "timestamp": datetime.utcnow()}
+        return {"metrics": dashboard_data, "timestamp": datetime.now()}
 
     except Exception as e:
         raise HTTPException(

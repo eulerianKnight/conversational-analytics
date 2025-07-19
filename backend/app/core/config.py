@@ -1,5 +1,4 @@
-# backend/app/core/config.py
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 from typing import Optional
 import os
 

@@ -1,0 +1,10 @@
+# Data analysis
+pandas
+
+# Visualization
+plotly
+
+# Frontend
+streamlit
+streamlit-authenticator
+streamlit-option-menu

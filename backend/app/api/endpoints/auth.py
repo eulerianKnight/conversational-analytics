@@ -6,8 +6,12 @@ from datetime import datetime, timedelta
 import jwt
 import uuid
 from typing import Optional
+
 from app.core.config import settings
-from app.core.database import db_manager
+from app.core.database import DatabaseManager
+
+# Initialize database manager
+db_manager = DatabaseManager()
 
 router = APIRouter()
 security = HTTPBearer()
@@ -56,7 +60,7 @@ def get_password_hash(password: str) -> str:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
         to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
@@ -161,7 +165,7 @@ async def login(user_credentials: UserLogin):
         INSERT INTO user_sessions (user_id, session_id, expires_at)
         VALUES (?, ?, ?)
     """
-    expires_at = datetime.utcnow() + timedelta(
+    expires_at = datetime.now() + timedelta(
         minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
     )
     db_manager.execute_non_query(session_query, (user["id"], session_id, expires_at))
